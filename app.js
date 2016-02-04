@@ -21,7 +21,10 @@ pmx.initModule(
   },
   function(err, conf) {
 
-    winston.add(winston.transports.Loggly, conf.logglyClient);
+    var options = conf;
+    options.logglyClient.tags = options.logglyClient.tags.split(',');
+    options.pm2Apps = options.pm2Apps.split(',');
+    winston.add(winston.transports.Loggly, options.logglyClient);
 
     pm2.connect(function(err) {
       if (err) return console.error('PM2 Loggly:', err.stack || err);
@@ -33,7 +36,7 @@ pmx.initModule(
 
           bus.on('log:out', function(log) {
             if (log.process.name !== 'pm2-loggly') {
-              if (conf.pm2Apps.indexOf(log.process.name) > -1) {
+              if (options.pm2Apps.indexOf(log.process.name) > -1) {
                 console.log(log.data);
                 winston.log('info', log.data);
               }
@@ -42,7 +45,7 @@ pmx.initModule(
 
           bus.on('log:err', function(log) {
             if (log.process.name !== 'pm2-loggly') {
-              if (conf.pm2Apps.indexOf(log.process.name) > -1) {
+              if (options.pm2Apps.indexOf(log.process.name) > -1) {
                 console.error(log.data);
                 winston.log('error', log.data);
               }

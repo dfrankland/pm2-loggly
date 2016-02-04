@@ -17,15 +17,10 @@
     "logglyClient": {
       "token": "your-token",
       "subdomain": "your-subdomain",
-      "tags": [
-        "pm2-loggly"
-      ],
+      "tags": "your-tag-1,your-tag-2",
       "json": true
     },
-    "pm2Apps": [
-      "your-app-1",
-      "your-app-2"
-    ]
+    "pm2Apps": "your-app-1,your-app-2"
   },
   "apps": [
     {
