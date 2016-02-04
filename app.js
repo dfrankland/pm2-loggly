@@ -38,7 +38,7 @@ pmx.initModule(
             if (log.process.name !== 'pm2-loggly') {
               if (options.pm2Apps.indexOf(log.process.name) > -1) {
                 console.log(log.data);
-                winston.log('info', log.data);
+                winston.log('info', log.data, { tags: [log.process.name] });
               }
             }
           });
@@ -47,7 +47,7 @@ pmx.initModule(
             if (log.process.name !== 'pm2-loggly') {
               if (options.pm2Apps.indexOf(log.process.name) > -1) {
                 console.error(log.data);
-                winston.log('error', log.data);
+                winston.log('error', log.data, { tags: [log.process.name] });
               }
             }
           });
