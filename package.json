@@ -16,8 +16,7 @@
     "logglyClient": {
       "token": "your-token",
       "subdomain": "your-subdomain",
-      "tags": "your-tag-1,your-tag-2",
-      "json": true
+      "tags": "your-tag-1,your-tag-2"
     },
     "pm2Apps": "your-app-1,your-app-2"
   },

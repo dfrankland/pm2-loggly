@@ -50,6 +50,7 @@ pmx.initModule(
   function(err, conf) {
 
     var options = conf;
+    options.logglyClient.json = true;
     options.logglyClient.tags = options.logglyClient.tags.split(',');
     options.pm2Apps = options.pm2Apps.split(',');
     var client = loggly.createClient(options.logglyClient);
