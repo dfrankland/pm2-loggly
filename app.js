@@ -1,7 +1,32 @@
 var pmx = require('pmx');
 var pm2 = require('pm2');
-var winston = require('winston');
-require('winston-loggly');
+var loggly = require('loggly');
+
+function parseData(data) {
+  try {
+    return eval('(' + data + ')');
+  } catch (err) {
+    try {
+      return JSON.parse(data);
+    } catch (err) {
+      return '' + data;
+    }
+  }
+}
+
+function getLogglyMeta(level, data) {
+  var log = parseData(data);
+  var meta = {
+    timestamp: (new Date()).toISOString(),
+    level: level,
+  };
+  if (typeof log === 'object') {
+    meta.json = log;
+  } else {
+    meta.message = log;
+  }
+  return meta;
+}
 
 pmx.initModule(
   {
@@ -24,7 +49,7 @@ pmx.initModule(
     var options = conf;
     options.logglyClient.tags = options.logglyClient.tags.split(',');
     options.pm2Apps = options.pm2Apps.split(',');
-    winston.add(winston.transports.Loggly, options.logglyClient);
+    var client = loggly.createClient(options.logglyClient);
 
     pm2.connect(function(err) {
       if (err) return console.error('PM2 Loggly:', err.stack || err);
@@ -38,7 +63,10 @@ pmx.initModule(
             if (log.process.name !== 'pm2-loggly') {
               if (options.pm2Apps.indexOf(log.process.name) > -1) {
                 console.log(log.data);
-                winston.log('info', log.data, { tags: [log.process.name] });
+                client.log(
+                  getLogglyMeta('info', log.data),
+                  [log.process.name]
+                );
               }
             }
           });
@@ -47,7 +75,10 @@ pmx.initModule(
             if (log.process.name !== 'pm2-loggly') {
               if (options.pm2Apps.indexOf(log.process.name) > -1) {
                 console.error(log.data);
-                winston.log('error', log.data, { tags: [log.process.name] });
+                client.log(
+                  getLogglyMeta('error', log.data),
+                  [log.process.name]
+                );
               }
             }
           });

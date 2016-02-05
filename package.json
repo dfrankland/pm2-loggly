@@ -4,10 +4,9 @@
   "description": "PM2 Remote Logging to Loggly",
   "main": "app.js",
   "dependencies": {
+    "loggly": "^1.1.0",
     "pm2": "^1.0.0",
-    "pmx": "beta",
-    "winston": "^2.1.1",
-    "winston-loggly": "^1.3.1"
+    "pmx": "beta"
   },
   "repository": {
     "type": "git",
