@@ -1,6 +1,6 @@
 {
   "name": "pm2-loggly",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "PM2 Remote Logging to Loggly",
   "main": "app.js",
   "dependencies": {
