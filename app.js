@@ -3,6 +3,9 @@ var pm2 = require('pm2');
 var loggly = require('loggly');
 
 function parseData(data) {
+  data = data
+    .replace(/\n$/,'')
+    .replace(/\u001b\[(?:.*?m)?/g, '');
   try {
     return eval('(' + data + ')');
   } catch (err) {
