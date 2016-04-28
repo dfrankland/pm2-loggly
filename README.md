@@ -3,6 +3,10 @@
 
 [![NPM](https://nodei.co/npm/pm2-loggly.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/pm2-loggly/)
 
+### Installation
+
+`pm2 install pm2-loggly`
+
 ### Configuration
 ##### Default Configuration
 You can see this inside of [`package.json`](https://github.com/dfrankland/pm2-loggly/blob/master/package.json).
