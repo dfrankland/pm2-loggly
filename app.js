@@ -4,7 +4,7 @@ var loggly = require('loggly');
 
 function parseData(data) {
   data = data
-    .replace(/\n$/,'')
+    .replace(/\n$/, '')
     .replace(/\u001b\[(?:.*?m)?/g, '');
   try {
     return eval('(' + data + ')');
@@ -47,7 +47,7 @@ pmx.initModule(
       },
     },
   },
-  function(err, conf) {
+  function (err, conf) {
 
     var options = conf;
     options.logglyClient.json = true;
@@ -55,18 +55,17 @@ pmx.initModule(
     options.pm2Apps = options.pm2Apps.split(',');
     var client = loggly.createClient(options.logglyClient);
 
-    pm2.connect(function(err) {
+    pm2.connect(function (err) {
       if (err) return console.error('PM2 Loggly:', err.stack || err);
       pm2.launchBus(
-        function(err, bus) {
+        function (err, bus) {
           if (err) return console.error('PM2 Loggly:', err);
 
           console.log('PM2 Loggly: Bus connected');
 
-          bus.on('log:out', function(log) {
+          bus.on('log:out', function (log) {
             if (log.process.name !== 'pm2-loggly') {
               if (options.pm2Apps.indexOf(log.process.name) > -1) {
-                console.log(log.data);
                 client.log(
                   getLogglyMeta('info', log.data),
                   [log.process.name]
@@ -75,10 +74,9 @@ pmx.initModule(
             }
           });
 
-          bus.on('log:err', function(log) {
+          bus.on('log:err', function (log) {
             if (log.process.name !== 'pm2-loggly') {
               if (options.pm2Apps.indexOf(log.process.name) > -1) {
-                console.error(log.data);
                 client.log(
                   getLogglyMeta('error', log.data),
                   [log.process.name]
@@ -87,11 +85,11 @@ pmx.initModule(
             }
           });
 
-          bus.on('reconnect attempt', function() {
+          bus.on('reconnect attempt', function () {
             console.log('PM2 Loggly: Bus reconnecting');
           });
 
-          bus.on('close', function() {
+          bus.on('close', function () {
             console.log('PM2 Loggly: Bus closed');
             pm2.disconnectBus();
           });
